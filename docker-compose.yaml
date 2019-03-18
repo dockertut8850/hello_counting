@@ -1,0 +1,30 @@
+version: '2'
+
+services: 
+
+  redis:
+    image: redis
+    networks: 
+      - backend
+
+  hello_counting:
+    build: .
+    image: hello_counting
+    networks: 
+      - backend
+    ports:
+      - 5000:5000
+    depends_on: 
+      - redis
+
+  test_hello_counting:
+    image: hello_counting
+    networks: 
+      - backend
+    command: pytest-3
+    depends_on: 
+      - hello_counting
+
+networks: 
+  backend:
+    driver: bridge
